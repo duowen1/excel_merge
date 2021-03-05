@@ -18,7 +18,10 @@ def add_content(row,column,l,table,flag=False):
     if not flag:
         l.append(s)
     else:
-        l.append(int(s))
+        try:
+            l.append(int(s))
+        except ValueError:
+            l.append(0)
 
 workbook = xlwt.Workbook(encoding='utf-8')
 worksheet=workbook.add_sheet('Sheet1')
@@ -28,11 +31,11 @@ for labels in titles:#输出表头数据
     worksheet.write(0,colums,label=labels)
     colums+=1
 
-filepath='.\\query\\'
+filepath='.\\'
 filelist = os.listdir(filepath)
 rows=1
 for xls in filelist:#遍历目录下所有文件
-    if os.path.splitext(xls)[-1]=='.xlsx':#过滤文件名
+    if os.path.splitext(xls)[-1]=='.xlsx' or os.path.splitext(xls)[-1]=='.xls':#过滤文件名
         try:
             data = xlrd.open_workbook(filepath+xls)
         except PermissionError:
