@@ -3,8 +3,17 @@ import os
 import xlrd
 #2.0.1版本的xlrd不能操作xlsx文件，将xlrd回退至1.2.0
 import xlwt
+import argparse
 
-outputname='2020年度期货从业人员状况调查汇总表.xls'
+parser = argparse.ArgumentParser()
+parser.add_argument("-o",'--output',help="outputfile")
+args=parser.parse_args()
+
+if args.output:
+    outputname=args.output
+else:
+    outputname='2020年度期货从业人员状况调查汇总表.xls'
+
 if os.path.exists(outputname):
     os.remove(outputname)
 
