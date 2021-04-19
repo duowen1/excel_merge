@@ -3,6 +3,14 @@ import os
 import xlrd
 #2.0.1版本的xlrd不能操作xlsx文件，将xlrd回退至1.2.0
 import xlwt
+import win32com.client
+
+def unprotect_xlsx(filename, pw_str):
+    xcl = win32com.client.Dispatch("Excel.Application")
+    wb = xcl.Workbooks.Open(filename, False, False, None, pw_str)
+    xcl.DisplayAlerts = False
+    wb.SaveAs(filename, None, '', '')
+    xcl.Quit()
 
 outputname='2020年度期货从业人员状况调查汇总表.xls'
 if os.path.exists(outputname):
@@ -25,7 +33,8 @@ for name in l:
     columns+=1
 
 #设置源excel文件
-filepath='.\\'
+filepath=os.path.dirname(os.path.abspath(__file__))+"\\"
+print(filepath)
 filelist = os.listdir(filepath)
 
 rows=1
@@ -39,7 +48,8 @@ for xls in filelist:
             continue
         except xlrd.biffh.XLRDError:
             print(filepath+xls)
-            continue
+            unprotect_xlsx(filepath+xls,'')
+            data = xlrd.open_workbook(filepath+xls)
         
         else:
             #序号
