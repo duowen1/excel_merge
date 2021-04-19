@@ -35,6 +35,10 @@ for xls in filelist:
         try:
             data = xlrd.open_workbook(filepath+xls)
         except PermissionError:
+            print("PermissonError",filepath+xls)
+            continue
+        except xlrd.biffh.XLRDError:
+            print(filepath+xls)
             continue
         
         else:
@@ -48,7 +52,10 @@ for xls in filelist:
                 x=int(items.split()[1])-1
                 y=ord(items.split()[2])-ord('a')
 
-                is_int=items.split()[-1]=='i'
+                is_int=False
+                item_list = items.split()
+                if len(item_list)==4 and item_list[-1]=='i':
+                    is_int=True
 
                 content=table.cell_value(x,y)
 
